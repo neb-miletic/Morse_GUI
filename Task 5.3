@@ -1,0 +1,109 @@
+from tkinter import *
+import RPi.GPIO as GPIO
+import time
+
+
+
+ledPin=21
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(ledPin,GPIO.OUT)
+
+
+root = Tk()
+root.geometry('300x100')
+
+l = Label(root,text = 'Type text here:').grid(row=0)
+
+enter = Entry(root)
+enter.grid(row=0,column=1)
+enter.delete(0,END)
+
+GPIO.output(ledPin,GPIO.LOW)
+
+
+exit = Button(text = "Morse",command = lambda: Morse(enter.get())).grid(row=4)
+CODE = {' ': ' ',
+        "'": '.----.',
+        '(': '-.--.-',
+        ')': '-.--.-',
+        ',': '--..--',
+        '-': '-....-',
+        '.': '.-.-.-',
+        '/': '-..-.',
+        '0': '-----',
+        '1': '.----',
+        '2': '..---',
+        '3': '...--',
+        '4': '....-',
+        '5': '.....',
+        '6': '-....',
+        '7': '--...',
+        '8': '---..',
+        '9': '----.',
+        ':': '---...',
+        ';': '-.-.-.',
+        '?': '..--..',
+        'A': '.-',
+        'B': '-...',
+        'C': '-.-.',
+        'D': '-..',
+        'E': '.',
+        'F': '..-.',
+        'G': '--.',
+        'H': '....',
+        'I': '..',
+        'J': '.---',
+        'K': '-.-',
+        'L': '.-..',
+        'M': '--',
+        'N': '-.',
+        'O': '---',
+        'P': '.--.',
+        'Q': '--.-',
+        'R': '.-.',
+        'S': '...',
+        'T': '-',
+        'U': '..-',
+        'V': '...-',
+        'W': '.--',
+        'X': '-..-',
+        'Y': '-.--',
+        'Z': '--..',
+        '_': '..--.-'}
+ 
+
+
+
+def dot():
+    GPIO.output(ledPin,1)
+    time.sleep(0.2)
+    GPIO.output(ledPin,0)
+    time.sleep(0.2)
+
+def dash():
+    GPIO.output(ledPin,1)
+    time.sleep(0.5)
+    GPIO.output(ledPin,0)
+    time.sleep(0.2)
+GPIO.cleanup()    
+def Morse(inp):
+  if len(inp) > 12:
+    print('Input is too long!')
+    root.destroy()
+  enter.delete(0,END)
+  
+  
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(ledPin,GPIO.OUT)
+  for letter in inp:
+    for symbol in CODE[letter.upper()]:
+      if symbol == '-':
+        dash()
+      elif symbol == '.':
+        dot()
+      else:
+        time.sleep(0.5)
+        time.sleep(0.5)
+        
+
+
